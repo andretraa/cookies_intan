@@ -1,0 +1,114 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Product;
+use App\Models\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
+    {
+        // 1. Seed or update Admin User
+        User::updateOrCreate(
+            ['email' => 'admin@cookiesintan.com'],
+            [
+                'name' => 'Admin Cookies Intan',
+                'password' => Hash::make('admin123'),
+                'role' => 'admin',
+            ]
+        );
+
+        // Also ensure any previous admin has access if preferred
+        User::updateOrCreate(
+            ['email' => 'admin@barbershop.com'],
+            [
+                'name' => 'Admin Cookies Intan',
+                'password' => Hash::make('admin123'),
+                'role' => 'admin',
+            ]
+        );
+
+        // 2. Seed Initial Products
+        $initialProducts = [
+            [
+                'name' => 'Fudgy Brownies',
+                'category' => 'brownies',
+                'description' => 'Brownies super moist dengan lapisan cokelat rich yang intense.',
+                'price' => 45000,
+                'price_unit' => '/box',
+                'badge' => 'Best Seller',
+                'image' => 'images/brownies.jpg',
+                'is_active' => true,
+                'sort_order' => 1,
+            ],
+            [
+                'name' => 'Choco Chip Cookies',
+                'category' => 'cookies',
+                'description' => 'Crispy di luar, chewy di dalam, penuh chocolate chip lumer.',
+                'price' => 38000,
+                'price_unit' => '/pcs',
+                'badge' => 'Favorit',
+                'image' => 'images/cookies.jpg',
+                'is_active' => true,
+                'sort_order' => 2,
+            ],
+            [
+                'name' => 'Sweet Moment Hampers',
+                'category' => 'hampers',
+                'description' => 'Kado manis berisi pilihan cookies & brownies premium siap kirim.',
+                'price' => 125000,
+                'price_unit' => '/set',
+                'badge' => 'Gift',
+                'image' => 'images/hampers.jpg',
+                'is_active' => true,
+                'sort_order' => 3,
+            ],
+            [
+                'name' => 'Birthday Cake',
+                'category' => 'cake',
+                'description' => 'Kue ulang tahun cokelat mewah dengan dekorasi premium.',
+                'price' => 150000,
+                'price_unit' => '/mulai dari',
+                'badge' => 'Spesial',
+                'image' => 'images/birthday_cake.jpg',
+                'is_active' => true,
+                'sort_order' => 4,
+            ],
+            [
+                'name' => 'Caramel Pudding',
+                'category' => 'pudding',
+                'description' => 'Puding karamel creamy dengan saus karamel homemade yang kaya rasa.',
+                'price' => 35000,
+                'price_unit' => '/cup',
+                'badge' => null,
+                'image' => 'images/caramel_pudding.jpg',
+                'is_active' => true,
+                'sort_order' => 5,
+            ],
+            [
+                'name' => 'Brownies Walnut',
+                'category' => 'brownies',
+                'description' => 'Brownies fudgy dengan tambahan walnut renyah yang gurih.',
+                'price' => 55000,
+                'price_unit' => '/box',
+                'badge' => null,
+                'image' => 'images/brownies.jpg',
+                'is_active' => true,
+                'sort_order' => 6,
+            ],
+        ];
+
+        foreach ($initialProducts as $data) {
+            Product::updateOrCreate(
+                ['name' => $data['name']],
+                $data
+            );
+        }
+    }
+}

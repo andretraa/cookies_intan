@@ -1,0 +1,448 @@
+@extends('layouts.app')
+
+@section('title', 'Cookies Intan - Manis untuk Setiap Momen | Homemade Bakery')
+
+@section('content')
+
+<!-- ===== HERO SECTION ===== -->
+<section class="hero" id="home">
+    <!-- Floating decorations -->
+    <div class="hero-floats">
+        <span class="float-item">🍪</span>
+        <span class="float-item">🍫</span>
+        <span class="float-item">🎂</span>
+        <span class="float-item">🍮</span>
+        <span class="float-item">✨</span>
+    </div>
+
+    <div class="hero-inner">
+        <!-- Content -->
+        <div class="hero-content">
+            <div class="hero-eyebrow">
+                <span>🍪</span> Homemade dengan Cinta
+            </div>
+
+            <h1 class="hero-title">
+                Manis untuk<br>
+                <span class="highlight">Setiap Momen</span>
+            </h1>
+
+            <p class="hero-subtitle">
+                Dessert homemade yang dibuat <em>fresh</em> dan <em>sepenuh hati</em> — dari bahan pilihan, hadir di setiap kesempatan spesialmu dengan rasa yang tak terlupakan.
+            </p>
+
+            <div class="hero-cta">
+                <a href="#menu" class="btn btn-primary">
+                    <i class="fa-solid fa-book-open"></i> Lihat Katalog
+                </a>
+                <a href="https://wa.me/6287789235490" target="_blank" class="btn btn-outline">
+                    <i class="fa-brands fa-whatsapp"></i> Pesan Sekarang
+                </a>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Freshly Made</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5+</div>
+                    <div class="stat-label">Menu Manis</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">❤️</div>
+                    <div class="stat-label">Dibuat Sepenuh Hati</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">🎁</div>
+                    <div class="stat-label">Made for Sharing</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Image -->
+        <div class="hero-image">
+            <div class="hero-image-main">
+                <img src="{{ asset('images/hero_cookies.jpg') }}" alt="Cookies dan Brownies Homemade Cookies Intan" loading="eager">
+            </div>
+
+            <!-- Floating badges -->
+            <div class="hero-badge-float left">
+                <div class="badge-icon">🍫</div>
+                <div class="badge-text">Best Seller</div>
+                <div class="badge-sub">Fudgy Brownies</div>
+            </div>
+
+            <div class="hero-badge-float right">
+                <div class="badge-icon">⭐</div>
+                <div class="badge-text">4.9 / 5.0</div>
+                <div class="badge-sub">Rating Pelanggan</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FEATURE STRIP ===== -->
+<section class="feature-strip">
+    <div class="feature-strip-inner">
+        <div class="feature-item">
+            <div class="feature-icon">🌿</div>
+            <div class="feature-item-text">
+                <div class="title">100% Freshly Made</div>
+                <div class="sub">Dibuat segar setiap hari</div>
+            </div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">🍪</div>
+            <div class="feature-item-text">
+                <div class="title">5+ Menu Manis</div>
+                <div class="sub">Pilihan lengkap & beragam</div>
+            </div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">❤️</div>
+            <div class="feature-item-text">
+                <div class="title">Dibuat Sepenuh Hati</div>
+                <div class="sub">Bahan premium pilihan</div>
+            </div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">🎁</div>
+            <div class="feature-item-text">
+                <div class="title">Made for Sharing</div>
+                <div class="sub">Cocok untuk hadiah & momen spesial</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== MENU / PRODUCTS SECTION ===== -->
+<section class="section" id="menu">
+    <div class="container">
+        <div class="text-center reveal">
+            <div class="section-badge">✨ Favorit Cookies Intan ✨</div>
+            <h2 class="section-title">Menu Pilihan Kami</h2>
+            <p class="section-subtitle">Setiap produk dibuat dengan bahan premium pilihan, menghadirkan cita rasa terbaik yang memanjakan lidah.</p>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="category-tabs reveal">
+            <button class="tab-btn active" data-filter="all" id="tab-all">Semua</button>
+            <button class="tab-btn" data-filter="brownies" id="tab-brownies">Brownies</button>
+            <button class="tab-btn" data-filter="cookies" id="tab-cookies">Cookies</button>
+            <button class="tab-btn" data-filter="hampers" id="tab-hampers">Hampers</button>
+            <button class="tab-btn" data-filter="cake" id="tab-cake">Birthday Cake</button>
+            <button class="tab-btn" data-filter="pudding" id="tab-pudding">Pudding</button>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid" id="productsGrid">
+            @forelse($products as $index => $product)
+                <div class="product-card reveal delay-{{ ($index % 5) + 1 }}" data-category="{{ $product->category }}">
+                    <div class="product-card-img-wrap">
+                        <img class="product-card-img" src="{{ $product->image_url }}" alt="{{ $product->name }} Cookies Intan" loading="lazy">
+                        @if($product->badge)
+                            <span class="product-badge">{{ $product->badge }}</span>
+                        @endif
+                    </div>
+                    <div class="product-card-body">
+                        <div class="product-name">{{ $product->name }}</div>
+                        <div class="product-desc">{{ $product->description }}</div>
+                        <div class="product-price">{{ $product->formatted_price }} <span class="product-price-sub">{{ $product->price_unit }}</span></div>
+                    </div>
+                </div>
+            @empty
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted);">
+                    <p>Belum ada produk dalam katalog saat ini.</p>
+                </div>
+            @endforelse
+        </div>
+
+        <div class="text-center reveal" style="margin-top: 36px;">
+            <a href="https://wa.me/6287789235490?text=Halo%20Cookies%20Intan%2C%20saya%20mau%20lihat%20menu%20lengkap" target="_blank" class="btn btn-primary">
+                <i class="fa-solid fa-cookie-bite"></i> Lihat Semua Menu
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== ABOUT SECTION ===== -->
+<section class="about-section" id="about">
+    <div class="about-inner">
+        <!-- Images -->
+        <div class="about-images reveal-left">
+            <img class="about-img-main" src="{{ asset('images/hero_cookies.jpg') }}" alt="Tentang Cookies Intan" loading="lazy">
+            <img class="about-img-secondary" src="{{ asset('images/cookies.jpg') }}" alt="Proses pembuatan cookies" loading="lazy">
+            <div class="about-heart">❤️</div>
+        </div>
+
+        <!-- Content -->
+        <div class="about-content reveal-right">
+            <div class="section-badge">🍪 A Little About Us 🍪</div>
+            <h2 class="section-title">Tentang Cookies Intan</h2>
+
+            <blockquote class="about-quote">
+                "Cookies Intan lahir dari cinta dan kesenangan membuat dessert dengan bahan pilihan."
+            </blockquote>
+
+            <p class="about-desc">
+                Setiap cookies kami dibuat fresh dengan bahan-bahan berkualitas pilihan, hadir di setiap momen spesial — dari ulang tahun, hadiah, hingga camilan sehari-hari yang memanjakan. Semua sweet things made inside and made with love.
+            </p>
+
+            <p class="about-desc">
+                Kami percaya bahwa makanan yang dibuat dengan hati akan selalu terasa berbeda. Setiap gigitan adalah bukti cinta kami kepada pelanggan setia Cookies Intan.
+            </p>
+
+            <p class="about-tagline">
+                <em>Small treats. Big feelings.</em> ✨
+            </p>
+
+            <div style="margin-top: 32px; display: flex; gap: 16px; flex-wrap: wrap;">
+                <a href="https://wa.me/6287789235490" target="_blank" class="btn btn-primary">
+                    <i class="fa-brands fa-whatsapp"></i> Hubungi Kami
+                </a>
+                <a href="#menu" class="btn btn-outline">
+                    <i class="fa-solid fa-cookie-bite"></i> Lihat Menu
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+<!-- ===== HOW TO ORDER SECTION ===== -->
+<section class="section how-section" id="cara-pesan">
+    <div class="container">
+        <div class="text-center reveal">
+            <div class="section-badge">✨ Simple & Easy ✨</div>
+            <h2 class="section-title">Cara Pesan Cookies Intan</h2>
+            <p class="section-subtitle">Pesan homemade cookies & dessert favoritmu sangat mudah!</p>
+        </div>
+
+        <div class="steps-grid">
+            <div class="step-card reveal delay-1">
+                <div class="step-number">01</div>
+                <span class="step-icon">🛒</span>
+                <h3 class="step-title">Pilih Menu</h3>
+                <p class="step-desc">Browse menu favorit di katalog kami — Brownies, Cookies, Hampers, Birthday Cake, atau Pudding sesuai selera.</p>
+            </div>
+
+            <div class="step-card reveal delay-2">
+                <div class="step-number">02</div>
+                <span class="step-icon">💬</span>
+                <h3 class="step-title">Chat Kami</h3>
+                <p class="step-desc">Hubungi kami lewat WhatsApp untuk konfirmasi pesanan, alamat, dan detail pengiriman. Kami siap membantu!</p>
+            </div>
+
+            <div class="step-card reveal delay-3">
+                <div class="step-number">03</div>
+                <span class="step-icon">❤️</span>
+                <h3 class="step-title">Nikmati Manisnya</h3>
+                <p class="step-desc">Pesanan dikirim fresh dan siap dinikmati. Bagi kebahagiaan manis bersama orang-orang terkasih!</p>
+            </div>
+        </div>
+
+        <div class="text-center reveal" style="margin-top: 48px;">
+            <a href="https://wa.me/6287789235490?text=Halo%20Cookies%20Intan%2C%20saya%20mau%20pesan!" target="_blank" class="btn btn-primary" style="font-size: 1rem; padding: 14px 36px;">
+                <i class="fa-brands fa-whatsapp"></i> Pesan via WhatsApp Sekarang
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="section" id="testimoni">
+    <div class="container">
+        <div class="text-center reveal">
+            <div class="section-badge">💬 Kata Mereka 💬</div>
+            <h2 class="section-title">Apa Kata Pelanggan Kami?</h2>
+            <p class="section-subtitle">Ribuan pelanggan puas dengan kelezatan Cookies Intan setiap harinya.</p>
+        </div>
+
+        <div class="testimonials-grid" style="margin-top: 48px;">
+            <div class="testimonial-card reveal delay-1">
+                <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">
+                    "Brownies-nya enak banget! Moist, rich, dan rasanya beneran premium. Sudah pesan berkali-kali dan selalu puas. Highly recommended!"
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">A</div>
+                    <div>
+                        <div class="author-name">AndreTraa, Bandungg</div>
+                        <div class="author-city">Pelanggan Setia</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card reveal delay-2">
+                <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">
+                    "Hampers-nya cantik dan isinya banyak! Teman-teman suka banget ketika saya hadiahin Hampers Cookies Intan waktu arisan. Pasti pesan lagi!"
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">W</div>
+                    <div>
+                        <div class="author-name">Wulann, Bandung</div>
+                        <div class="author-city">Pelanggan Setia</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card reveal delay-3">
+                <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">
+                    "Pudding caramel-nya enak banget, creamy, saus karamelnya pas tidak terlalu manis. Birthday cake-nya juga cantik dan lezat. Terima kasih!"
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">B</div>
+                    <div>
+                        <div class="author-name">Budi, Surabaya</div>
+                        <div class="author-city">Pelanggan Setia</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FAQ SECTION ===== -->
+<section class="section" id="faq" style="background: var(--cream-dark);">
+    <div class="container">
+        <div class="text-center reveal">
+            <div class="section-badge">❓ FAQ ❓</div>
+            <h2 class="section-title">Pertanyaan yang Sering Ditanya</h2>
+        </div>
+
+        <div style="max-width: 720px; margin: 48px auto 0;" class="reveal">
+            <div class="faq-item" style="background: var(--white); border-radius: var(--radius-md); margin-bottom: 12px; overflow: hidden; box-shadow: var(--shadow-sm);">
+                <button class="faq-question" onclick="toggleFaq(this)" style="width:100%; text-align:left; padding: 20px 24px; background:none; border:none; cursor:pointer; font-family:'Poppins',sans-serif; font-size:0.95rem; font-weight:600; color:var(--brown-dark); display:flex; align-items:center; justify-content:space-between;">
+                    Berapa lama waktu pembuatan pesanan?
+                    <i class="fa-solid fa-chevron-down" style="transition: all 0.3s; color: var(--orange);"></i>
+                </button>
+                <div class="faq-answer" style="display:none; padding: 0 24px 20px; font-size:0.9rem; color:var(--text-medium); line-height:1.7;">
+                    Waktu pembuatan biasanya 1-2 hari kerja setelah konfirmasi pesanan dan pembayaran. Untuk pesanan hampers atau birthday cake besar, kami sarankan pesan 3-4 hari sebelumnya.
+                </div>
+            </div>
+
+            <div class="faq-item" style="background: var(--white); border-radius: var(--radius-md); margin-bottom: 12px; overflow: hidden; box-shadow: var(--shadow-sm);">
+                <button class="faq-question" onclick="toggleFaq(this)" style="width:100%; text-align:left; padding: 20px 24px; background:none; border:none; cursor:pointer; font-family:'Poppins',sans-serif; font-size:0.95rem; font-weight:600; color:var(--brown-dark); display:flex; align-items:center; justify-content:space-between;">
+                    Apakah bisa pesan dengan custom rasa atau packaging?
+                    <i class="fa-solid fa-chevron-down" style="transition: all 0.3s; color: var(--orange);"></i>
+                </button>
+                <div class="faq-answer" style="display:none; padding: 0 24px 20px; font-size:0.9rem; color:var(--text-medium); line-height:1.7;">
+                    Ya! Kami menerima custom pesanan untuk rasa, ukuran, dan packaging. Hubungi kami via WhatsApp untuk diskusi lebih lanjut.
+                </div>
+            </div>
+
+            <div class="faq-item" style="background: var(--white); border-radius: var(--radius-md); margin-bottom: 12px; overflow: hidden; box-shadow: var(--shadow-sm);">
+                <button class="faq-question" onclick="toggleFaq(this)" style="width:100%; text-align:left; padding: 20px 24px; background:none; border:none; cursor:pointer; font-family:'Poppins',sans-serif; font-size:0.95rem; font-weight:600; color:var(--brown-dark); display:flex; align-items:center; justify-content:space-between;">
+                    Berapa lama ketahanan produk?
+                    <i class="fa-solid fa-chevron-down" style="transition: all 0.3s; color: var(--orange);"></i>
+                </button>
+                <div class="faq-answer" style="display:none; padding: 0 24px 20px; font-size:0.9rem; color:var(--text-medium); line-height:1.7;">
+                    Brownies & Cookies: 5-7 hari suhu ruang, 2 minggu di kulkas. Pudding & Cake: 3-4 hari di kulkas. Semua produk tanpa bahan pengawet, fresh dan sehat!
+                </div>
+            </div>
+
+            <div class="faq-item" style="background: var(--white); border-radius: var(--radius-md); margin-bottom: 12px; overflow: hidden; box-shadow: var(--shadow-sm);">
+                <button class="faq-question" onclick="toggleFaq(this)" style="width:100%; text-align:left; padding: 20px 24px; background:none; border:none; cursor:pointer; font-family:'Poppins',sans-serif; font-size:0.95rem; font-weight:600; color:var(--brown-dark); display:flex; align-items:center; justify-content:space-between;">
+                    Apakah bisa dikirim ke luar kota?
+                    <i class="fa-solid fa-chevron-down" style="transition: all 0.3s; color: var(--orange);"></i>
+                </button>
+                <div class="faq-answer" style="display:none; padding: 0 24px 20px; font-size:0.9rem; color:var(--text-medium); line-height:1.7;">
+                    Untuk saat ini pengiriman dilayani melalui jasa ekspedisi untuk produk Brownies & Cookies (dikemas khusus agar tetap aman). Hubungi kami untuk info biaya ongkir ke daerah Anda.
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FINAL CTA ===== -->
+<section style="background: linear-gradient(135deg, var(--brown-dark), var(--chocolate)); padding: 100px 24px; position: relative; overflow: hidden; text-align: center;" id="kontak">
+    <!-- Decorative images -->
+    <div style="position:absolute; right:0; bottom:0; opacity:0.15; font-size: 12rem; pointer-events:none; line-height:1;">🍪</div>
+    <div style="position:absolute; left:0; top:0; opacity:0.08; font-size: 10rem; pointer-events:none; line-height:1;">🍫</div>
+
+    <div style="max-width: 700px; margin: 0 auto; position: relative; z-index: 2;" class="reveal">
+        <p style="font-size: 0.85rem; font-weight: 700; color: var(--gold-light); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px;">
+            🍪 READY FOR A SWEET MOMENT? 🍪
+        </p>
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 700; color: var(--white); line-height: 1.2; margin-bottom: 16px;">
+            Siap untuk Momen <span style="color: var(--gold-light);">Manis?</span>
+        </h2>
+        <p style="font-size: 1rem; color: rgba(255,255,255,0.7); margin-bottom: 36px; line-height: 1.7;">
+            Pesan sekarang via WhatsApp dan rasakan sendiri kelezatan homemade cookies & dessert Cookies Intan yang dibuat penuh cinta!
+        </p>
+        <a href="https://wa.me/6287789235490?text=Halo%20Cookies%20Intan%2C%20saya%20mau%20pesan!" target="_blank"
+           style="display:inline-flex; align-items:center; gap:14px; background: linear-gradient(135deg, #25D366, #128C7E);
+                  color: #fff; padding: 18px 44px; border-radius: 50px; font-size: 1.1rem; font-weight: 700;
+                  box-shadow: 0 8px 30px rgba(37,211,102,0.5); transition: all 0.3s ease; text-decoration:none;">
+            <i class="fa-brands fa-whatsapp" style="font-size:1.5rem;"></i>
+            Pesan via WhatsApp · 0821 2993 1721
+        </a>
+    </div>
+</section>
+
+@endsection
+
+@section('scripts')
+<script>
+    // Product filter tabs
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const productCards = document.querySelectorAll('#productsGrid .product-card');
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Update active tab
+            tabBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filter = btn.dataset.filter;
+
+            productCards.forEach(card => {
+                if (filter === 'all' || card.dataset.category === filter) {
+                    card.style.display = '';
+                    setTimeout(() => card.style.opacity = '1', 10);
+                } else {
+                    card.style.opacity = '0';
+                    setTimeout(() => card.style.display = 'none', 300);
+                }
+            });
+        });
+    });
+
+    // FAQ Toggle
+    function toggleFaq(btn) {
+        const answer = btn.nextElementSibling;
+        const icon = btn.querySelector('.fa-chevron-down');
+        const isOpen = answer.style.display === 'block';
+
+        // Close all
+        document.querySelectorAll('.faq-answer').forEach(a => a.style.display = 'none');
+        document.querySelectorAll('.faq-question .fa-chevron-down').forEach(i => {
+            i.style.transform = '';
+        });
+
+        if (!isOpen) {
+            answer.style.display = 'block';
+            icon.style.transform = 'rotate(180deg)';
+        }
+    }
+
+    // Hover on final CTA WA button
+    const finalWaBtn = document.querySelector('#kontak a');
+    if (finalWaBtn) {
+        finalWaBtn.addEventListener('mouseenter', () => {
+            finalWaBtn.style.transform = 'translateY(-3px)';
+            finalWaBtn.style.boxShadow = '0 14px 40px rgba(37,211,102,0.6)';
+        });
+        finalWaBtn.addEventListener('mouseleave', () => {
+            finalWaBtn.style.transform = '';
+            finalWaBtn.style.boxShadow = '0 8px 30px rgba(37,211,102,0.5)';
+        });
+    }
+</script>
+@endsection
