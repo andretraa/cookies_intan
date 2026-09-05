@@ -27,12 +27,13 @@ if (!getenv('CACHE_STORE')) {
     putenv('CACHE_STORE=array');
 }
 
-// If using SQLite on Vercel, ensure /tmp/database.sqlite file exists
+// If DB_HOST is unset or localhost on Vercel, fallback DB_CONNECTION to sqlite
 $sqliteDb = '/tmp/database.sqlite';
 if (!file_exists($sqliteDb)) {
     @touch($sqliteDb);
 }
-if (!getenv('DB_DATABASE') && getenv('DB_CONNECTION') === 'sqlite') {
+if (!getenv('DB_HOST') || getenv('DB_HOST') === '127.0.0.1') {
+    putenv('DB_CONNECTION=sqlite');
     putenv('DB_DATABASE=' . $sqliteDb);
 }
 
