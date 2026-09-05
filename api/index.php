@@ -49,6 +49,9 @@ $forceEnv('APP_MAINTENANCE_STORE', 'file');
 
 // Session — must NEVER be empty or 'database' on Vercel (no DB available)
 $forceEnv('SESSION_DRIVER', 'cookie');
+// Cookie session must be secure (HTTPS) on Vercel and use 'lax' same-site
+$forceEnv('SESSION_SECURE_COOKIE', 'true');
+$forceEnv('SESSION_SAME_SITE', 'lax');
 
 // Cache — must NEVER be empty or 'database' on Vercel
 $forceEnv('CACHE_STORE', 'array');
