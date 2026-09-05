@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin Dashboard') - Cookies Intan</title>
 
+    <!-- Favicon / App Icon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -260,6 +265,9 @@
                 <a href="{{ route('admin.catalog.index') }}" class="nav-link-btn {{ request()->routeIs('admin.catalog.*') ? 'active' : '' }}">
                     <i class="fa-solid fa-cookie-bite"></i> Kelola Katalog & Foto
                 </a>
+                <a href="{{ route('admin.settings.index') }}" class="nav-link-btn {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-pen-to-square"></i> Kelola Teks Depan
+                </a>
                 <a href="{{ route('home') }}" target="_blank" class="nav-link-btn" title="Buka website publik di tab baru">
                     <i class="fa-solid fa-arrow-up-right-from-square"></i> Lihat Website
                 </a>
@@ -298,7 +306,7 @@
             </div>
         @endif
 
-        @if($errors->any())
+        @if(isset($errors) && $errors->any())
             <div class="alert alert-danger">
                 <i class="fa-solid fa-circle-exclamation" style="font-size: 1.2rem;"></i>
                 <div>

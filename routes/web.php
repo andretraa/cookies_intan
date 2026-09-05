@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\CatalogController as AdminCatalogController;
+use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/{product}', [AdminCatalogController::class, 'update'])->name('update');
             Route::delete('/{product}', [AdminCatalogController::class, 'destroy'])->name('destroy');
             Route::patch('/{product}/toggle', [AdminCatalogController::class, 'toggleStatus'])->name('toggle');
+        });
+
+        // Pengaturan Teks Halaman Depan
+        Route::prefix('settings')->name('settings.')->group(function () {
+            Route::get('/', [AdminSettingController::class, 'index'])->name('index');
+            Route::post('/', [AdminSettingController::class, 'update'])->name('update');
+            Route::post('/reset', [AdminSettingController::class, 'reset'])->name('reset');
         });
     });
 });

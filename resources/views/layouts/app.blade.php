@@ -6,6 +6,11 @@
     <title>@yield('title', 'Cookies Intan - Homemade Bakery dengan Cinta')</title>
     <meta name="description" content="Cookies Intan - Toko kue homemade premium. Brownies, Cookies, Hampers, Birthday Cake & Pudding. Dibuat fresh dari bahan pilihan dengan penuh cinta. Pesan via WhatsApp!">
 
+    <!-- Favicon / App Icon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,7 +62,7 @@
                 @endauth
             </div>
 
-            <a href="https://wa.me/6287789235490" target="_blank" class="btn btn-primary btn-sm" style="display:none;" id="navWaBtn">
+            <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6287789235490') }}" target="_blank" class="btn btn-primary btn-sm" style="display:none;" id="navWaBtn">
                 <i class="fa-brands fa-whatsapp"></i> Pesan Sekarang
             </a>
 
@@ -87,13 +92,13 @@
                     </div>
                 </div>
                 <p class="footer-desc">
-                    Cookies Intan lahir dari cinta dan kesenangan membuat dessert dengan bahan pilihan. Setiap cookies dibuat fresh untuk kebahagiaan setiap momen.
+                    {{ \App\Models\SiteSetting::get('footer_description', 'Cookies Intan lahir dari cinta dan kesenangan membuat dessert dengan bahan pilihan. Setiap cookies dibuat fresh untuk kebahagiaan setiap momen.') }}
                 </p>
                 <div class="footer-socials">
-                    <a href="#" class="social-btn" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" class="social-btn" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-                    <a href="https://wa.me/6287789235490" class="social-btn" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-                    <a href="#" class="social-btn" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="{{ \App\Models\SiteSetting::get('contact_instagram_url', 'https://instagram.com/cookiesIntan') }}" target="_blank" class="social-btn" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="{{ \App\Models\SiteSetting::get('contact_tiktok_url', '#') }}" target="_blank" class="social-btn" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6287789235490') }}" target="_blank" class="social-btn" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="{{ \App\Models\SiteSetting::get('contact_facebook_url', '#') }}" target="_blank" class="social-btn" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
                 </div>
             </div>
 
@@ -102,7 +107,6 @@
                 <h4 class="footer-title">Navigasi</h4>
                 <ul class="footer-links">
                     <li><a href="#menu"><i class="fa-solid fa-chevron-right"></i> Katalog</a></li>
-
                     <li><a href="#about"><i class="fa-solid fa-chevron-right"></i> Tentang Kami</a></li>
                     <li><a href="#cara-pesan"><i class="fa-solid fa-chevron-right"></i> Cara Pesan</a></li>
                     <li><a href="#kontak"><i class="fa-solid fa-chevron-right"></i> Kontak</a></li>
@@ -113,11 +117,11 @@
             <div>
                 <h4 class="footer-title">Kategori</h4>
                 <ul class="footer-links">
-                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Brownies</a></li>
-                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Cookies</a></li>
-                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Hampers</a></li>
-                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Birthday Cake</a></li>
-                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Pudding</a></li>
+                    <li><a href="#menu"><i class="fa-solid fa-chevron-right"></i> Brownies</a></li>
+                    <li><a href="#menu"><i class="fa-solid fa-chevron-right"></i> Cookies</a></li>
+                    <li><a href="#menu"><i class="fa-solid fa-chevron-right"></i> Hampers</a></li>
+                    <li><a href="#menu"><i class="fa-solid fa-chevron-right"></i> Birthday Cake</a></li>
+                    <li><a href="#menu"><i class="fa-solid fa-chevron-right"></i> Pudding</a></li>
                 </ul>
             </div>
 
@@ -127,19 +131,19 @@
                 <div class="footer-contact-item">
                     <i class="fa-brands fa-whatsapp"></i>
                     <div>
-                        <div style="color: rgba(255,255,255,0.85); font-weight: 600;">0877 8923 5490</div>
-                        <div style="font-size:0.78rem;">Senin - Minggu, 08.00 - 21.00</div>
+                        <div style="color: rgba(255,255,255,0.85); font-weight: 600;">{{ \App\Models\SiteSetting::get('contact_whatsapp_display', '0877 8923 5490') }}</div>
+                        <div style="font-size:0.78rem;">{{ \App\Models\SiteSetting::get('contact_hours', 'Senin - Minggu, 08.00 - 21.00') }}</div>
                     </div>
                 </div>
                 <div class="footer-contact-item">
                     <i class="fa-brands fa-instagram"></i>
-                    <span>@cookiesIntan</span>
+                    <span>{{ \App\Models\SiteSetting::get('contact_instagram', '@cookiesIntan') }}</span>
                 </div>
                 <div class="footer-contact-item">
                     <i class="fa-solid fa-location-dot"></i>
-                    <span>Freshly baked with love ❤️</span>
+                    <span>{{ \App\Models\SiteSetting::get('contact_address_tagline', 'Freshly baked with love ❤️') }}</span>
                 </div>
-                <a href="https://wa.me/6287789235490" target="_blank" class="btn btn-primary btn-sm" style="margin-top: 16px;">
+                <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6287789235490') }}" target="_blank" class="btn btn-primary btn-sm" style="margin-top: 16px;">
                     <i class="fa-brands fa-whatsapp"></i> Pesan Sekarang
                 </a>
             </div>
@@ -164,7 +168,7 @@
     </footer>
 
     <!-- WhatsApp Float Button -->
-    <a href="https://wa.me/6287789235490" target="_blank" id="waFloat"
+    <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6287789235490') }}" target="_blank" id="waFloat"
        style="position:fixed; bottom:28px; right:28px; z-index:9999; width:58px; height:58px;
               background: linear-gradient(135deg, #25D366, #128C7E);
               border-radius:50%; display:flex; align-items:center; justify-content:center;
