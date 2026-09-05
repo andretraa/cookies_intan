@@ -19,6 +19,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (config('app.env') === 'production' || str_contains(request()->header('host', ''), 'vercel.app') || str_contains(request()->header('host', ''), 'vercel.com')) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         \Illuminate\Support\Facades\Hash::extend('safe_bcrypt', function ($app) {
             return new class extends \Illuminate\Hashing\AbstractHasher implements \Illuminate\Contracts\Hashing\Hasher {
                 public function make(#[\SensitiveParameter] $value, array $options = [])

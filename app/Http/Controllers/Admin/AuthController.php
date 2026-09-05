@@ -50,7 +50,7 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
 
-            return redirect()->intended(route('admin.catalog.index'))
+            return redirect()->route('admin.catalog.index')
                 ->with('success', 'Selamat datang kembali, ' . $user->name . '!');
         }
 

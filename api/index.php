@@ -36,8 +36,13 @@ $host = $_SERVER['HTTP_HOST']
 $proto = $_SERVER['HTTP_X_FORWARDED_PROTO']
     ?? ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http');
 // On Vercel, always use https
-if (str_contains($host, 'vercel.app') || str_contains($host, 'vercel.com')) {
+if (str_contains($host, 'vercel.app') || str_contains($host, 'vercel.com') || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) {
     $proto = 'https';
+    $_SERVER['HTTPS'] = 'on';
+    $_SERVER['SERVER_PORT'] = 443;
+    $_SERVER['HTTP_X_FORWARDED_PROTO'] = 'https';
+    $_SERVER['HTTP_X_FORWARDED_PORT'] = 443;
+    $_SERVER['HTTP_X_FORWARDED_SSL'] = 'on';
 }
 $appUrl = $proto . '://' . $host;
 $forceEnv('APP_URL', $appUrl);
