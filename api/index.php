@@ -1,9 +1,5 @@
 <?php
 
-// Suppress deprecation warnings from being output to HTTP response stream
-error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
-ini_set('display_errors', '1');
-
 // Ensure /tmp storage directories exist for Vercel serverless environment
 $tmpStorage = '/tmp/storage';
 if (!file_exists($tmpStorage)) {
@@ -28,7 +24,7 @@ $setEnv('APP_DEBUG', 'true');
 $setEnv('SESSION_DRIVER', 'cookie');
 $setEnv('CACHE_STORE', 'array');
 
-// If DB_HOST is unset or localhost on Vercel, fallback DB_CONNECTION to sqlite
+// If DB_HOST is unset or localhost on Vercel, fallback DB_CONNECTION to sqlite if available
 $sqliteDb = '/tmp/database.sqlite';
 if (!file_exists($sqliteDb)) {
     @touch($sqliteDb);
@@ -52,17 +48,29 @@ putenv('APP_EVENTS_CACHE=' . $tmpStorage . '/events.php');
 
 define('LARAVEL_START', microtime(true));
 
-// Register Composer autoloader
-require __DIR__ . '/../vendor/autoload.php';
+try {
+    // Register Composer autoloader
+    require __DIR__ . '/../vendor/autoload.php';
 
-// Bootstrap Laravel
-/** @var \Illuminate\Foundation\Application $app */
-$app = require_once __DIR__ . '/../bootstrap/app.php';
+    // Bootstrap Laravel
+    /** @var \Illuminate\Foundation\Application $app */
+    $app = require_once __DIR__ . '/../bootstrap/app.php';
 
-// Override storage path to /tmp/storage for Vercel read-only filesystem
-$app->useStoragePath($tmpStorage);
+    // Override storage path to /tmp/storage for Vercel read-only filesystem
+    $app->useStoragePath($tmpStorage);
 
-// Handle request
-$app->handleRequest(\Illuminate\Http\Request::capture());
+    // Handle request
+    $app->handleRequest(\Illuminate\Http\Request::capture());
+} catch (\Throwable $e) {
+    http_response_code(200);
+    echo '<div style="font-family: sans-serif; padding: 30px; line-height: 1.6; max-width: 800px; margin: 0 auto; color: #333;">';
+    echo '<h2 style="color: #e53e3e;">⚠️ Laravel Deployment Notice</h2>';
+    echo '<p><strong>Message:</strong> ' . htmlspecialchars($e->getMessage()) . '</p>';
+    echo '<p><strong>File:</strong> ' . htmlspecialchars($e->getFile()) . ' <strong>Line:</strong> ' . $e->getLine() . '</p>';
+    echo '<pre style="background: #f7fafc; padding: 15px; border-radius: 5px; border: 1px solid #e2e8f0; overflow-x: auto; font-size: 13px;">' . htmlspecialchars($e->getTraceAsString()) . '</pre>';
+    echo '</div>';
+    exit;
+}
+
 
 
