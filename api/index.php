@@ -1,5 +1,9 @@
 <?php
 
+// Suppress deprecation warnings from being output to HTTP response stream
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+ini_set('display_errors', '0');
+
 // Ensure /tmp storage directories exist for Vercel serverless environment
 $tmpStorage = '/tmp/storage';
 if (!file_exists($tmpStorage)) {
