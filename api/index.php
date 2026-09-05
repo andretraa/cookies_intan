@@ -61,12 +61,34 @@ $forceEnv('QUEUE_CONNECTION', 'sync');
 
 // Database — fallback to sqlite when running on Vercel (no MySQL available)
 $sqliteDb = '/tmp/database.sqlite';
-if (!file_exists($sqliteDb)) {
-    @touch($sqliteDb);
-}
+$bundledDb = __DIR__ . '/../database/database.sqlite';
+
 $dbHost = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?? '';
 if (empty($dbHost) || $dbHost === '127.0.0.1') {
     if (extension_loaded('pdo_sqlite')) {
+        // Copy bundled pre-seeded database if /tmp database doesn't exist or is empty
+        if (!file_exists($sqliteDb) || filesize($sqliteDb) < 5000) {
+            if (file_exists($bundledDb) && filesize($bundledDb) > 0) {
+                @copy($bundledDb, $sqliteDb);
+            } else {
+                @touch($sqliteDb);
+            }
+        }
+
+        // Safety verification: verify tables exist in /tmp/database.sqlite
+        try {
+            if (file_exists($sqliteDb) && filesize($sqliteDb) > 0) {
+                $checkPdo = new PDO('sqlite:' . $sqliteDb);
+                $checkPdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $tableCheck = $checkPdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name='users'")->fetch();
+                if (!$tableCheck && file_exists($bundledDb) && filesize($bundledDb) > 0) {
+                    @copy($bundledDb, $sqliteDb);
+                }
+            }
+        } catch (\Throwable $t) {
+            // ignore
+        }
+
         $forceEnv('DB_CONNECTION', 'sqlite');
         $forceEnv('DB_DATABASE', $sqliteDb);
     }
@@ -91,31 +113,6 @@ try {
 
     // Override storage path to /tmp/storage for Vercel read-only filesystem
     $app->useStoragePath($tmpStorage);
-
-    // ===========================================================
-    // AUTO-MIGRATE + SEED for SQLite on Vercel serverless.
-    // /tmp/ is ephemeral — fresh on every cold start.
-    // We detect if tables are missing and run migrations + seed.
-    // ===========================================================
-    if (getenv('DB_CONNECTION') === 'sqlite' && file_exists(getenv('DB_DATABASE'))) {
-        try {
-            $pdo = new \PDO('sqlite:' . getenv('DB_DATABASE'));
-            $tables = $pdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name='users'")->fetchAll();
-            if (empty($tables)) {
-                // Migrate
-                \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-                // Seed admin user directly via PDO (faster + avoids full seeder overhead)
-                $hashedPw = password_hash('admin123', PASSWORD_BCRYPT);
-                $now = date('Y-m-d H:i:s');
-                $pdo->exec("INSERT OR IGNORE INTO users (name, email, password, role, created_at, updated_at)
-                    VALUES ('Admin Cookies Intan', 'admin@cookiesintan.com', '$hashedPw', 'admin', '$now', '$now')");
-                // Also seed products
-                \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
-            }
-        } catch (\Throwable $migrateErr) {
-            // Silently ignore migration errors — app may still work
-        }
-    }
 
     // Handle request
     $app->handleRequest(\Illuminate\Http\Request::capture());

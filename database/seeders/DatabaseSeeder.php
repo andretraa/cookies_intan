@@ -110,5 +110,8 @@ class DatabaseSeeder extends Seeder
                 $data
             );
         }
+
+        // 3. Seed Site Settings
+        $this->call(SiteSettingSeeder::class);
     }
 }
