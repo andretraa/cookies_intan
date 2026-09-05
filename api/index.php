@@ -58,6 +58,21 @@ $forceEnv('SESSION_COOKIE', 'ci_session');
 $forceEnv('SESSION_SECURE_COOKIE', 'true');
 $forceEnv('SESSION_SAME_SITE', 'lax');
 
+// Clear any bloated legacy cookies if present to prevent header bloat
+$legacyCookies = ['laravel-session', 'cookies-intan-session', 'cookiesintan-session', 'laravel_session'];
+foreach ($legacyCookies as $oldCookie) {
+    if (isset($_COOKIE[$oldCookie])) {
+        @setcookie($oldCookie, '', [
+            'expires' => time() - 3600,
+            'path' => '/',
+            'secure' => true,
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
+        unset($_COOKIE[$oldCookie]);
+    }
+}
+
 // Cache — must NEVER be empty or 'database' on Vercel
 $forceEnv('CACHE_STORE', 'array');
 
