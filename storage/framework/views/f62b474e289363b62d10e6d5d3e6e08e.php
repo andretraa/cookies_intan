@@ -202,12 +202,28 @@
         // Hamburger menu
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
+        
+        function closeMobileNav() {
+            if (navLinks.classList.contains('open')) {
+                navLinks.classList.remove('open');
+                const spans = hamburger.querySelectorAll('span');
+                spans[0].style.transform = '';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = '';
+            }
+        }
+
         hamburger.addEventListener('click', () => {
-            navLinks.classList.toggle('open');
+            const isOpen = navLinks.classList.toggle('open');
             const spans = hamburger.querySelectorAll('span');
-            spans[0].style.transform = navLinks.classList.contains('open') ? 'rotate(45deg) translate(5px, 5px)' : '';
-            spans[1].style.opacity = navLinks.classList.contains('open') ? '0' : '1';
-            spans[2].style.transform = navLinks.classList.contains('open') ? 'rotate(-45deg) translate(5px, -5px)' : '';
+            spans[0].style.transform = isOpen ? 'rotate(45deg) translate(5px, 5px)' : '';
+            spans[1].style.opacity = isOpen ? '0' : '1';
+            spans[2].style.transform = isOpen ? 'rotate(-45deg) translate(5px, -5px)' : '';
+        });
+
+        // Close mobile nav when clicking any nav link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', closeMobileNav);
         });
 
         // Scroll reveal
