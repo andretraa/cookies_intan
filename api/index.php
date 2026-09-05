@@ -27,6 +27,10 @@ if (empty(getenv('APP_KEY'))) {
 $forceEnv('APP_ENV', 'production');
 $forceEnv('APP_DEBUG', 'true');
 
+// Maintenance mode — must NEVER be empty on Vercel
+$forceEnv('APP_MAINTENANCE_DRIVER', 'file');
+$forceEnv('APP_MAINTENANCE_STORE', 'file');
+
 // Session — must NEVER be empty or 'database' on Vercel (no DB available)
 $forceEnv('SESSION_DRIVER', 'cookie');
 
