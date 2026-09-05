@@ -1,9 +1,2 @@
-.env
-.git
-.github
-/vendor
-/node_modules
-/storage/framework/cache/*
-/storage/framework/sessions/*
-/storage/framework/views/*
-/storage/logs/*
+public/index.php
+public/.htaccess
