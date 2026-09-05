@@ -9,35 +9,44 @@ if (!file_exists($tmpStorage)) {
     @mkdir($tmpStorage . '/logs', 0755, true);
 }
 
-// Helper to set environment variable across getenv, $_ENV, and $_SERVER if empty or unset
-$setEnv = function ($key, $val) {
-    $existing = getenv($key);
-    if (empty($existing) || empty($_ENV[$key]) || empty($_SERVER[$key])) {
-        putenv("{$key}={$val}");
-        $_ENV[$key] = $val;
-        $_SERVER[$key] = $val;
-    }
+// ============================================================
+// VERCEL SERVERLESS: Force-set all critical environment vars
+// unconditionally BEFORE Laravel reads any config.
+// This ensures empty-string env values from Vercel are replaced.
+// ============================================================
+$forceEnv = function ($key, $val) {
+    putenv("{$key}={$val}");
+    $_ENV[$key] = $val;
+    $_SERVER[$key] = $val;
 };
 
-$setEnv('APP_KEY', 'base64:VNxlKyGHR0nxDa9xB2Pa1MA5KFQ3Bex1SlFpL0DZS+s=');
-$setEnv('APP_ENV', 'production');
-$setEnv('APP_DEBUG', 'true');
-$setEnv('SESSION_DRIVER', 'cookie');
-$setEnv('CACHE_STORE', 'array');
+// App
+if (empty(getenv('APP_KEY'))) {
+    $forceEnv('APP_KEY', 'base64:VNxlKyGHR0nxDa9xB2Pa1MA5KFQ3Bex1SlFpL0DZS+s=');
+}
+$forceEnv('APP_ENV', 'production');
+$forceEnv('APP_DEBUG', 'true');
 
-// If DB_HOST is unset or localhost on Vercel, fallback DB_CONNECTION to sqlite if available
+// Session — must NEVER be empty or 'database' on Vercel (no DB available)
+$forceEnv('SESSION_DRIVER', 'cookie');
+
+// Cache — must NEVER be empty or 'database' on Vercel
+$forceEnv('CACHE_STORE', 'array');
+
+// Queue — must NEVER try to use database on Vercel
+$forceEnv('QUEUE_CONNECTION', 'sync');
+
+// Database — fallback to sqlite when running on Vercel (no MySQL available)
 $sqliteDb = '/tmp/database.sqlite';
 if (!file_exists($sqliteDb)) {
     @touch($sqliteDb);
 }
-$dbHost = getenv('DB_HOST') ?: ($_ENV['DB_HOST'] ?? null);
-if ((empty($dbHost) || $dbHost === '127.0.0.1') && extension_loaded('pdo_sqlite')) {
-    putenv("DB_CONNECTION=sqlite");
-    $_ENV['DB_CONNECTION'] = 'sqlite';
-    $_SERVER['DB_CONNECTION'] = 'sqlite';
-    putenv("DB_DATABASE={$sqliteDb}");
-    $_ENV['DB_DATABASE'] = $sqliteDb;
-    $_SERVER['DB_DATABASE'] = $sqliteDb;
+$dbHost = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?? '';
+if (empty($dbHost) || $dbHost === '127.0.0.1') {
+    if (extension_loaded('pdo_sqlite')) {
+        $forceEnv('DB_CONNECTION', 'sqlite');
+        $forceEnv('DB_DATABASE', $sqliteDb);
+    }
 }
 
 putenv('VIEW_COMPILED_PATH=' . $tmpStorage . '/framework/views');
