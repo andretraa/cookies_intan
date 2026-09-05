@@ -92,6 +92,31 @@ try {
     // Override storage path to /tmp/storage for Vercel read-only filesystem
     $app->useStoragePath($tmpStorage);
 
+    // ===========================================================
+    // AUTO-MIGRATE + SEED for SQLite on Vercel serverless.
+    // /tmp/ is ephemeral — fresh on every cold start.
+    // We detect if tables are missing and run migrations + seed.
+    // ===========================================================
+    if (getenv('DB_CONNECTION') === 'sqlite' && file_exists(getenv('DB_DATABASE'))) {
+        try {
+            $pdo = new \PDO('sqlite:' . getenv('DB_DATABASE'));
+            $tables = $pdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name='users'")->fetchAll();
+            if (empty($tables)) {
+                // Migrate
+                \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+                // Seed admin user directly via PDO (faster + avoids full seeder overhead)
+                $hashedPw = password_hash('admin123', PASSWORD_BCRYPT);
+                $now = date('Y-m-d H:i:s');
+                $pdo->exec("INSERT OR IGNORE INTO users (name, email, password, role, created_at, updated_at)
+                    VALUES ('Admin Cookies Intan', 'admin@cookiesintan.com', '$hashedPw', 'admin', '$now', '$now')");
+                // Also seed products
+                \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+            }
+        } catch (\Throwable $migrateErr) {
+            // Silently ignore migration errors — app may still work
+        }
+    }
+
     // Handle request
     $app->handleRequest(\Illuminate\Http\Request::capture());
 } catch (\Throwable $e) {
