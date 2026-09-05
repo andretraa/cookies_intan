@@ -27,6 +27,22 @@ if (empty(getenv('APP_KEY'))) {
 $forceEnv('APP_ENV', 'production');
 $forceEnv('APP_DEBUG', 'true');
 
+// Set APP_URL dynamically from request so asset() generates correct HTTPS URLs
+// This is critical for CSS/JS to load correctly on Vercel (HTTPS)
+$host = $_SERVER['HTTP_HOST']
+    ?? $_SERVER['HTTP_X_FORWARDED_HOST']
+    ?? getenv('VERCEL_URL')
+    ?? 'localhost';
+$proto = $_SERVER['HTTP_X_FORWARDED_PROTO']
+    ?? ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http');
+// On Vercel, always use https
+if (str_contains($host, 'vercel.app') || str_contains($host, 'vercel.com')) {
+    $proto = 'https';
+}
+$appUrl = $proto . '://' . $host;
+$forceEnv('APP_URL', $appUrl);
+$forceEnv('ASSET_URL', $appUrl);
+
 // Maintenance mode — must NEVER be empty on Vercel
 $forceEnv('APP_MAINTENANCE_DRIVER', 'file');
 $forceEnv('APP_MAINTENANCE_STORE', 'file');
