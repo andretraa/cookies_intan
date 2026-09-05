@@ -59,6 +59,9 @@ $forceEnv('CACHE_STORE', 'array');
 // Queue — must NEVER try to use database on Vercel
 $forceEnv('QUEUE_CONNECTION', 'sync');
 
+// Hashing — use safe_bcrypt driver that never fails on serverless environments
+$forceEnv('HASH_DRIVER', 'safe_bcrypt');
+
 // Database — fallback to sqlite when running on Vercel (no MySQL available)
 $sqliteDb = '/tmp/database.sqlite';
 $bundledDb = __DIR__ . '/../database/database.sqlite';
