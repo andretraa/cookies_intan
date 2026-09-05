@@ -9,9 +9,10 @@ if (!file_exists($tmpStorage)) {
     @mkdir($tmpStorage . '/logs', 0755, true);
 }
 
-// Helper to set environment variable across getenv, $_ENV, and $_SERVER
+// Helper to set environment variable across getenv, $_ENV, and $_SERVER if empty or unset
 $setEnv = function ($key, $val) {
-    if (empty($_ENV[$key]) && empty($_SERVER[$key]) && getenv($key) === false) {
+    $existing = getenv($key);
+    if (empty($existing) || empty($_ENV[$key]) || empty($_SERVER[$key])) {
         putenv("{$key}={$val}");
         $_ENV[$key] = $val;
         $_SERVER[$key] = $val;
