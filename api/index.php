@@ -34,7 +34,7 @@ if (!file_exists($sqliteDb)) {
     @touch($sqliteDb);
 }
 $dbHost = getenv('DB_HOST') ?: ($_ENV['DB_HOST'] ?? null);
-if (empty($dbHost) || $dbHost === '127.0.0.1') {
+if ((empty($dbHost) || $dbHost === '127.0.0.1') && extension_loaded('pdo_sqlite')) {
     putenv("DB_CONNECTION=sqlite");
     $_ENV['DB_CONNECTION'] = 'sqlite';
     $_SERVER['DB_CONNECTION'] = 'sqlite';
