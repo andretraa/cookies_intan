@@ -108,8 +108,8 @@ class SiteSettingSeeder extends Seeder
             ['key' => 'faq_4_a', 'value' => 'Untuk saat ini pengiriman dilayani melalui jasa ekspedisi untuk produk Brownies & Cookies (dikemas khusus agar tetap aman). Hubungi kami untuk info biaya ongkir ke daerah Anda.', 'group' => 'faq'],
 
             // === KONTAK, FOOTER & FINAL CTA ===
-            ['key' => 'contact_whatsapp_number', 'value' => '6287789235490', 'group' => 'contact'],
-            ['key' => 'contact_whatsapp_display', 'value' => '0877 8923 5490', 'group' => 'contact'],
+            ['key' => 'contact_whatsapp_number', 'value' => '6282315230979', 'group' => 'contact'],
+            ['key' => 'contact_whatsapp_display', 'value' => '0823 1523 0979', 'group' => 'contact'],
             ['key' => 'contact_hours', 'value' => 'Senin - Minggu, 08.00 - 21.00', 'group' => 'contact'],
             ['key' => 'contact_instagram', 'value' => '@cookiesIntan', 'group' => 'contact'],
             ['key' => 'contact_instagram_url', 'value' => 'https://instagram.com/cookiesIntan', 'group' => 'contact'],

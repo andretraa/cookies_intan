@@ -35,7 +35,7 @@
                 <a href="#menu" class="btn btn-primary">
                     <i class="fa-solid fa-book-open"></i> {{ \App\Models\SiteSetting::get('hero_btn_catalog', 'Lihat Katalog') }}
                 </a>
-                <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6287789235490') }}" target="_blank" class="btn btn-outline">
+                <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6282315230979') }}" target="_blank" class="btn btn-outline">
                     <i class="fa-brands fa-whatsapp"></i> {{ \App\Models\SiteSetting::get('hero_btn_order', 'Pesan Sekarang') }}
                 </a>
             </div>
@@ -192,7 +192,7 @@
             </p>
 
             <div style="margin-top: 32px; display: flex; gap: 16px; flex-wrap: wrap;">
-                <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6287789235490') }}" target="_blank" class="btn btn-primary">
+                <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6282315230979') }}" target="_blank" class="btn btn-primary">
                     <i class="fa-brands fa-whatsapp"></i> Hubungi Kami
                 </a>
                 <a href="#menu" class="btn btn-outline">
@@ -236,7 +236,7 @@
         </div>
 
         <div class="text-center reveal" style="margin-top: 48px;">
-            <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6287789235490') }}?text=Halo%20Cookies%20Intan%2C%20saya%20mau%20pesan!" target="_blank" class="btn btn-primary" style="font-size: 1rem; padding: 14px 36px;">
+            <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6282315230979') }}?text=Halo%20Cookies%20Intan%2C%20saya%20mau%20pesan!" target="_blank" class="btn btn-primary" style="font-size: 1rem; padding: 14px 36px;">
                 <i class="fa-brands fa-whatsapp"></i> {{ \App\Models\SiteSetting::get('order_btn_text', 'Pesan via WhatsApp Sekarang') }}
             </a>
         </div>
@@ -366,12 +366,12 @@
         <p style="font-size: 1rem; color: rgba(255,255,255,0.7); margin-bottom: 36px; line-height: 1.7;">
             {{ \App\Models\SiteSetting::get('final_cta_subtitle', 'Pesan sekarang via WhatsApp dan rasakan sendiri kelezatan homemade cookies & dessert Cookies Intan yang dibuat penuh cinta!') }}
         </p>
-        <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6287789235490') }}?text=Halo%20Cookies%20Intan%2C%20saya%20mau%20pesan!" target="_blank"
+        <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6282315230979') }}?text=Halo%20Cookies%20Intan%2C%20saya%20mau%20pesan!" target="_blank"
            style="display:inline-flex; align-items:center; gap:14px; background: linear-gradient(135deg, #25D366, #128C7E);
                   color: #fff; padding: 18px 44px; border-radius: 50px; font-size: 1.1rem; font-weight: 700;
                   box-shadow: 0 8px 30px rgba(37,211,102,0.5); transition: all 0.3s ease; text-decoration:none;">
             <i class="fa-brands fa-whatsapp" style="font-size:1.5rem;"></i>
-            {{ \App\Models\SiteSetting::get('final_cta_btn_text', 'Pesan via WhatsApp') }} · {{ \App\Models\SiteSetting::get('contact_whatsapp_display', '0877 8923 5490') }}
+            {{ \App\Models\SiteSetting::get('final_cta_btn_text', 'Pesan via WhatsApp') }} · {{ \App\Models\SiteSetting::get('contact_whatsapp_display', '0823 1523 0979') }}
         </a>
     </div>
 </section>

@@ -62,7 +62,7 @@
                 @endauth
             </div>
 
-            <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6287789235490') }}" target="_blank" class="btn btn-primary btn-sm" style="display:none;" id="navWaBtn">
+            <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6282315230979') }}" target="_blank" class="btn btn-primary btn-sm" style="display:none;" id="navWaBtn">
                 <i class="fa-brands fa-whatsapp"></i> Pesan Sekarang
             </a>
 
@@ -97,7 +97,7 @@
                 <div class="footer-socials">
                     <a href="{{ \App\Models\SiteSetting::get('contact_instagram_url', 'https://instagram.com/cookiesIntan') }}" target="_blank" class="social-btn" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
                     <a href="{{ \App\Models\SiteSetting::get('contact_tiktok_url', '#') }}" target="_blank" class="social-btn" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-                    <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6287789235490') }}" target="_blank" class="social-btn" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6282315230979') }}" target="_blank" class="social-btn" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
                     <a href="{{ \App\Models\SiteSetting::get('contact_facebook_url', '#') }}" target="_blank" class="social-btn" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
                 </div>
             </div>
@@ -131,7 +131,7 @@
                 <div class="footer-contact-item">
                     <i class="fa-brands fa-whatsapp"></i>
                     <div>
-                        <div style="color: rgba(255,255,255,0.85); font-weight: 600;">{{ \App\Models\SiteSetting::get('contact_whatsapp_display', '0877 8923 5490') }}</div>
+                        <div style="color: rgba(255,255,255,0.85); font-weight: 600;">{{ \App\Models\SiteSetting::get('contact_whatsapp_display', '0823 1523 0979') }}</div>
                         <div style="font-size:0.78rem;">{{ \App\Models\SiteSetting::get('contact_hours', 'Senin - Minggu, 08.00 - 21.00') }}</div>
                     </div>
                 </div>
@@ -143,7 +143,7 @@
                     <i class="fa-solid fa-location-dot"></i>
                     <span>{{ \App\Models\SiteSetting::get('contact_address_tagline', 'Freshly baked with love ❤️') }}</span>
                 </div>
-                <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6287789235490') }}" target="_blank" class="btn btn-primary btn-sm" style="margin-top: 16px;">
+                <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6282315230979') }}" target="_blank" class="btn btn-primary btn-sm" style="margin-top: 16px;">
                     <i class="fa-brands fa-whatsapp"></i> Pesan Sekarang
                 </a>
             </div>
@@ -168,7 +168,7 @@
     </footer>
 
     <!-- WhatsApp Float Button -->
-    <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6287789235490') }}" target="_blank" id="waFloat"
+    <a href="https://wa.me/{{ \App\Models\SiteSetting::get('contact_whatsapp_number', '6282315230979') }}" target="_blank" id="waFloat"
        style="position:fixed; bottom:28px; right:28px; z-index:9999; width:58px; height:58px;
               background: linear-gradient(135deg, #25D366, #128C7E);
               border-radius:50%; display:flex; align-items:center; justify-content:center;

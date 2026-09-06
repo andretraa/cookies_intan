@@ -979,17 +979,17 @@
                 <div class="form-group col-6">
                     <label class="form-label">
                         Nomor WhatsApp (Format Internasional)
-                        <span class="hint">Awali 62 (contoh: 6287789235490)</span>
+                        <span class="hint">Awali 62 (contoh: 6282315230979)</span>
                     </label>
-                    <input type="text" name="contact_whatsapp_number" class="form-input" value="{{ $settings['contact_whatsapp_number'] ?? '6287789235490' }}" placeholder="6287789235490">
+                    <input type="text" name="contact_whatsapp_number" class="form-input" value="{{ $settings['contact_whatsapp_number'] ?? '6282315230979' }}" placeholder="6282315230979">
                 </div>
 
                 <div class="form-group col-6">
                     <label class="form-label">
                         Tampilan Nomor WhatsApp
-                        <span class="hint">Contoh: 0877 8923 5490</span>
+                        <span class="hint">Contoh: 0823 1523 0979</span>
                     </label>
-                    <input type="text" name="contact_whatsapp_display" class="form-input" value="{{ $settings['contact_whatsapp_display'] ?? '0877 8923 5490' }}" placeholder="0877 8923 5490">
+                    <input type="text" name="contact_whatsapp_display" class="form-input" value="{{ $settings['contact_whatsapp_display'] ?? '0823 1523 0979' }}" placeholder="0823 1523 0979">
                 </div>
 
                 <div class="form-group col-6">
