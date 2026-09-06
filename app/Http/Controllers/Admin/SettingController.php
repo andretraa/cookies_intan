@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\SiteSetting;
+use App\Services\FileUploadService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 
@@ -43,29 +44,18 @@ class SettingController extends Controller
 
         $imageKeys = ['hero_image', 'about_image_main', 'about_image_secondary'];
 
-        // Upload folder
-        $uploadDir = public_path('uploads/site');
-        if (!file_exists($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
-        }
-
         // Handle File Uploads
         foreach ($imageKeys as $imgKey) {
             if ($request->hasFile($imgKey)) {
-                $file = $request->file($imgKey);
-                $filename = $imgKey . '_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                $file->move($uploadDir, $filename);
-
-                // Hapus gambar lama jika ada di uploads/site
                 $oldVal = SiteSetting::where('key', $imgKey)->value('value');
-                if ($oldVal && str_starts_with($oldVal, 'uploads/site/') && file_exists(public_path($oldVal))) {
-                    @unlink(public_path($oldVal));
-                }
+                FileUploadService::deleteImage($oldVal);
+
+                $uploadedPath = FileUploadService::uploadImage($request->file($imgKey), 'site');
 
                 $group = str_starts_with($imgKey, 'hero_') ? 'hero' : 'about';
                 SiteSetting::updateOrCreate(
                     ['key' => $imgKey],
-                    ['value' => 'uploads/site/' . $filename, 'group' => $group]
+                    ['value' => $uploadedPath, 'group' => $group]
                 );
             }
         }

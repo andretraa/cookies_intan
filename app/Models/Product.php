@@ -44,7 +44,7 @@ class Product extends Model
             return asset('images/cookies.jpg');
         }
 
-        if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
+        if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://') || str_starts_with($this->image, 'data:')) {
             return $this->image;
         }
 

@@ -67,7 +67,7 @@ class SiteSetting extends Model
             return asset($defaultPath);
         }
 
-        if (str_starts_with($val, 'http://') || str_starts_with($val, 'https://')) {
+        if (str_starts_with($val, 'http://') || str_starts_with($val, 'https://') || str_starts_with($val, 'data:')) {
             return $val;
         }
 

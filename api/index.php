@@ -7,6 +7,8 @@ if (!file_exists($tmpStorage)) {
     @mkdir($tmpStorage . '/framework/sessions', 0755, true);
     @mkdir($tmpStorage . '/framework/cache', 0755, true);
     @mkdir($tmpStorage . '/logs', 0755, true);
+    @mkdir('/tmp/uploads/products', 0755, true);
+    @mkdir('/tmp/uploads/site', 0755, true);
 }
 
 // ============================================================

@@ -47,3 +47,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
     });
 });
+
+// Melayani file uploads statis dari public/uploads atau /tmp/uploads (untuk Vercel Serverless)
+Route::get('/uploads/{path}', function ($path) {
+    $fileInPublic = public_path('uploads/' . $path);
+    if (file_exists($fileInPublic) && is_file($fileInPublic)) {
+        return response()->file($fileInPublic);
+    }
+
+    $fileInTmp = '/tmp/uploads/' . $path;
+    if (file_exists($fileInTmp) && is_file($fileInTmp)) {
+        return response()->file($fileInTmp);
+    }
+
+    abort(404);
+})->where('path', '.*')->name('uploads.serve');
+

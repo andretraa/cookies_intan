@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Services\FileUploadService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -97,10 +98,7 @@ class CatalogController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = 'product_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/products'), $filename);
-            $imagePath = 'uploads/products/' . $filename;
+            $imagePath = FileUploadService::uploadImage($request->file('image'), 'products');
         }
 
         Product::create([
@@ -164,18 +162,8 @@ class CatalogController extends Controller
 
         // If user uploaded a new image, replace old file
         if ($request->hasFile('image')) {
-            // Delete old file if stored in uploads/products/
-            if ($product->image && str_starts_with($product->image, 'uploads/products/')) {
-                $oldFile = public_path($product->image);
-                if (File::exists($oldFile)) {
-                    File::delete($oldFile);
-                }
-            }
-
-            $file = $request->file('image');
-            $filename = 'product_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/products'), $filename);
-            $imagePath = 'uploads/products/' . $filename;
+            FileUploadService::deleteImage($product->image);
+            $imagePath = FileUploadService::uploadImage($request->file('image'), 'products');
         }
 
         $product->update([
@@ -201,12 +189,7 @@ class CatalogController extends Controller
         $productName = $product->name;
 
         // Delete uploaded image file if present
-        if ($product->image && str_starts_with($product->image, 'uploads/products/')) {
-            $filePath = public_path($product->image);
-            if (File::exists($filePath)) {
-                File::delete($filePath);
-            }
-        }
+        FileUploadService::deleteImage($product->image);
 
         $product->delete();
 

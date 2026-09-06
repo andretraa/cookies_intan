@@ -20,7 +20,7 @@ return new class extends Migration
                 $table->decimal('price', 12, 2)->default(0);
                 $table->string('price_unit')->default('/pcs');
                 $table->string('badge')->nullable(); // Best Seller, Favorit, Spesial, Gift, etc.
-                $table->string('image')->nullable();
+                $table->longText('image')->nullable();
                 $table->boolean('is_active')->default(true);
                 $table->integer('sort_order')->default(0);
                 $table->timestamps();
