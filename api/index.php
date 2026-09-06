@@ -52,11 +52,14 @@ $forceEnv('ASSET_URL', $appUrl);
 $forceEnv('APP_MAINTENANCE_DRIVER', 'file');
 $forceEnv('APP_MAINTENANCE_STORE', 'file');
 
-// Session — use 'file' driver on /tmp/storage/framework/sessions with lightweight cookie ID
-$forceEnv('SESSION_DRIVER', 'file');
+// Session — use 'cookie' driver so session data is stored in the encrypted browser cookie.
+// On Vercel (serverless), each request may hit a different instance, so file-based sessions
+// do NOT persist. The 'cookie' driver embeds session data directly in the signed cookie.
+$forceEnv('SESSION_DRIVER', 'cookie');
 $forceEnv('SESSION_COOKIE', 'ci_session');
 $forceEnv('SESSION_SECURE_COOKIE', 'true');
 $forceEnv('SESSION_SAME_SITE', 'lax');
+$forceEnv('SESSION_ENCRYPT', 'true');
 
 // Clear any bloated legacy cookies if present to prevent header bloat
 $legacyCookies = ['laravel-session', 'cookies-intan-session', 'cookiesintan-session', 'laravel_session'];
