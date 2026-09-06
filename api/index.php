@@ -89,8 +89,11 @@ $bundledDb = __DIR__ . '/../database/database.sqlite';
 $dbHost = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?? '';
 if (empty($dbHost) || $dbHost === '127.0.0.1') {
     if (extension_loaded('pdo_sqlite')) {
-        // Copy bundled pre-seeded database if /tmp database doesn't exist or is empty
-        if (!file_exists($sqliteDb) || filesize($sqliteDb) < 5000) {
+        // Copy bundled pre-seeded database if /tmp database doesn't exist, is empty, or bundled DB is newer
+        $shouldCopy = !file_exists($sqliteDb)
+            || filesize($sqliteDb) < 5000
+            || (file_exists($bundledDb) && filemtime($bundledDb) > filemtime($sqliteDb));
+        if ($shouldCopy) {
             if (file_exists($bundledDb) && filesize($bundledDb) > 0) {
                 @copy($bundledDb, $sqliteDb);
             } else {
