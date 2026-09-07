@@ -92,12 +92,32 @@ $forceEnv('QUEUE_CONNECTION', 'sync');
 // Hashing — use safe_bcrypt driver that never fails on serverless environments
 $forceEnv('HASH_DRIVER', 'safe_bcrypt');
 
-// Database — fallback to sqlite when running on Vercel (no MySQL available)
+// Database — support Cloud Databases (Neon, Supabase, TiDB, etc.) or fallback to SQLite
 $sqliteDb = '/tmp/database.sqlite';
 $bundledDb = __DIR__ . '/../database/database.sqlite';
 
+$dbUrl = $_ENV['DATABASE_URL'] ?? getenv('DATABASE_URL') ?? '';
 $dbHost = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?? '';
-if (empty($dbHost) || $dbHost === '127.0.0.1') {
+$dbConnection = $_ENV['DB_CONNECTION'] ?? getenv('DB_CONNECTION') ?? '';
+
+// Auto-detect driver from DATABASE_URL if present
+if (!empty($dbUrl)) {
+    if (str_starts_with($dbUrl, 'postgres://') || str_starts_with($dbUrl, 'postgresql://')) {
+        $forceEnv('DB_CONNECTION', 'pgsql');
+    } elseif (str_starts_with($dbUrl, 'mysql://')) {
+        $forceEnv('DB_CONNECTION', 'mysql');
+    }
+} elseif (!empty($dbHost) && $dbHost !== '127.0.0.1' && $dbHost !== 'localhost') {
+    // Auto-detect driver from host patterns if not explicitly set
+    if (empty($dbConnection) || $dbConnection === 'sqlite') {
+        if (str_contains($dbHost, 'neon.tech') || str_contains($dbHost, 'supabase.co')) {
+            $forceEnv('DB_CONNECTION', 'pgsql');
+        } elseif (str_contains($dbHost, 'tidbcloud.com') || str_contains($dbHost, 'aivencloud.com')) {
+            $forceEnv('DB_CONNECTION', 'mysql');
+        }
+    }
+} else {
+    // Fallback to SQLite when no remote database is configured
     if (extension_loaded('pdo_sqlite')) {
         // Copy bundled pre-seeded database if /tmp database doesn't exist, is empty, or bundled DB is newer
         $shouldCopy = !file_exists($sqliteDb)
@@ -149,6 +169,19 @@ try {
 
     // Override storage path to /tmp/storage for Vercel read-only filesystem
     $app->useStoragePath($tmpStorage);
+
+    // Auto-migrate & seed when connected to a new/uninitialized database
+    if (!file_exists('/tmp/db_migrated')) {
+        try {
+            if (!\Illuminate\Support\Facades\Schema::hasTable('users') || !\Illuminate\Support\Facades\Schema::hasTable('products')) {
+                \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+                \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+            }
+            @touch('/tmp/db_migrated');
+        } catch (\Throwable $migError) {
+            // Ignore if schema inspect fails due to connection permissions
+        }
+    }
 
     // Handle request
     $app->handleRequest(\Illuminate\Http\Request::capture());

@@ -245,6 +245,111 @@
                 padding: 20px 16px 40px;
             }
         }
+
+        /* Database Badges & Sync Button */
+        .db-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: var(--radius-full);
+            font-size: 0.76rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: default;
+            border: 1px solid transparent;
+            font-family: inherit;
+        }
+
+        .db-badge-success {
+            background: #ECFDF5;
+            color: #065F46;
+            border-color: #A7F3D0;
+        }
+
+        .db-badge-warning {
+            background: #FFFBEB;
+            color: #B45309;
+            border-color: #FDE68A;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .db-badge-warning:hover {
+            background: #FEF3C7;
+            transform: translateY(-1px);
+        }
+
+        .db-badge-info {
+            background: var(--cream-dark);
+            color: var(--brown-dark);
+            border-color: rgba(200, 149, 108, 0.3);
+        }
+
+        .btn-sync-sqlite {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: #FFF8F0;
+            color: var(--brown-dark);
+            border: 1px solid rgba(200, 149, 108, 0.4);
+            border-radius: var(--radius-full);
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        .btn-sync-sqlite:hover {
+            background: var(--orange);
+            color: #fff;
+            border-color: var(--orange);
+        }
+
+        /* Cloud DB Guide Modal */
+        .db-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(44, 26, 14, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .db-modal-overlay.active {
+            display: flex;
+        }
+        .db-modal-content {
+            background: #FFFDFB;
+            max-width: 650px;
+            width: 100%;
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(200, 149, 108, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideDown 0.3s ease;
+        }
+        .db-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+        .db-modal-close:hover {
+            color: var(--danger);
+        }
     </style>
     @yield('styles')
 </head>
@@ -274,6 +379,31 @@
             </nav>
 
             <div class="admin-user-info">
+                @if(isset($dbStatus))
+                    @if($dbStatus['type'] === 'success')
+                        <span class="db-badge db-badge-success" title="{{ $dbStatus['detail'] }}">
+                            <i class="fa-solid fa-circle-check"></i> {{ $dbStatus['badge'] }}
+                        </span>
+                    @elseif($dbStatus['type'] === 'warning')
+                        <button type="button" class="db-badge db-badge-warning" onclick="openDbModal()" title="{{ $dbStatus['detail'] }}">
+                            <i class="fa-solid fa-triangle-exclamation"></i> {{ $dbStatus['badge'] }}
+                        </button>
+                    @else
+                        <span class="db-badge db-badge-info" title="{{ $dbStatus['detail'] }}">
+                            <i class="fa-solid fa-server"></i> {{ $dbStatus['badge'] }}
+                        </span>
+                    @endif
+
+                    @if($dbStatus['type'] !== 'success')
+                        <form action="{{ route('admin.settings.sync.sqlite') }}" method="POST" style="display: inline;" onsubmit="return confirm('Sinkronkan seluruh menu dan pengaturan saat ini ke file database/database.sqlite untuk persiapan push ke Vercel?');">
+                            @csrf
+                            <button type="submit" class="btn-sync-sqlite" title="Salin seluruh data ke database/database.sqlite agar ter-update saat Git Push ke Vercel">
+                                <i class="fa-solid fa-arrows-rotate"></i> Sync ke SQLite
+                            </button>
+                        </form>
+                    @endif
+                @endif
+
                 <div class="user-pill">
                     <i class="fa-solid fa-user-shield" style="color: var(--orange);"></i>
                     <span>{{ Auth::user()->name ?? 'Admin' }}</span>
@@ -322,6 +452,71 @@
 
         @yield('content')
     </main>
+
+    <!-- Modal Panduan Database Permanen Vercel -->
+    <div id="dbGuideModal" class="db-modal-overlay" onclick="if(event.target === this) closeDbModal();">
+        <div class="db-modal-content">
+            <button type="button" class="db-modal-close" onclick="closeDbModal()">&times;</button>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                <div style="width: 44px; height: 44px; border-radius: 12px; background: #FFF3DC; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: var(--orange);">
+                    <i class="fa-solid fa-cloud-bolt"></i>
+                </div>
+                <div>
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--brown-darker); margin: 0;">Cara Membuat Data Vercel Permanen</h3>
+                    <span style="font-size: 0.82rem; color: var(--text-muted);">Hanya butuh 2 menit (100% Gratis Tanpa Kartu Kredit)</span>
+                </div>
+            </div>
+
+            <div style="background: #FFF8F0; border: 1px solid rgba(200, 149, 108, 0.3); border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 20px; font-size: 0.88rem; line-height: 1.5; color: var(--brown-dark);">
+                <strong>💡 Mengapa di Vercel data bisa reset?</strong><br>
+                Vercel menggunakan serverless tanpa harddisk tetap. File database sementara di <code>/tmp</code> otomatis terhapus saat server tidur. Agar data menu baru & editan teks <strong>tidak pernah kembali ke awal</strong>, sambungkan database cloud gratis.
+            </div>
+
+            <h4 style="font-size: 0.98rem; font-weight: 700; color: var(--brown-dark); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                <span style="background: var(--brown); color: white; border-radius: 50%; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem;">1</span>
+                Opsi Terbaik: Gunakan Neon.tech (PostgreSQL Gratis)
+            </h4>
+            <ol style="margin-left: 24px; font-size: 0.88rem; color: #4B3B2B; line-height: 1.7; margin-bottom: 20px;">
+                <li>Buka dan daftar di <a href="https://neon.tech" target="_blank" style="color: var(--orange); font-weight: 600; text-decoration: underline;">Neon.tech</a> (Gratis, login dengan Google/GitHub).</li>
+                <li>Buat project baru (Pilih region terdekat: <strong>Singapore</strong>).</li>
+                <li>Salin <strong>Connection String</strong> yang muncul (contoh: <code>postgresql://user:pass@ep-xyz.neon.tech/neondb?sslmode=require</code>).</li>
+                <li>Buka dashboard di <strong>Vercel.com</strong> &rarr; Pilih project <strong>Cookies Intan</strong> &rarr; Tab <strong>Settings</strong> &rarr; <strong>Environment Variables</strong>.</li>
+                <li>Tambahkan variable baru:
+                    <div style="background: #2C1A0E; color: #F0C96B; padding: 8px 12px; border-radius: 6px; font-family: monospace; font-size: 0.82rem; margin: 6px 0;">
+                        Key: DATABASE_URL<br>
+                        Value: [paste connection string Neon Anda]
+                    </div>
+                </li>
+                <li>Buka tab <strong>Deployments</strong> di Vercel &rarr; klik menu (•••) pada commit paling atas &rarr; pilih <strong>Redeploy</strong>.</li>
+                <li><strong>Selesai!</strong> Sistem akan otomatis membuat tabel & data awal. Setelah itu, produk yang Anda tambah/edit langsung di web Vercel akan tersimpan <strong>permanen selamanya</strong>!</li>
+            </ol>
+
+            <h4 style="font-size: 0.98rem; font-weight: 700; color: var(--brown-dark); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                <span style="background: var(--brown); color: white; border-radius: 50%; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem;">2</span>
+                Jika Mengedit di Komputer Lokal (Laragon)
+            </h4>
+            <p style="font-size: 0.88rem; color: #4B3B2B; line-height: 1.6; margin-left: 24px; margin-bottom: 20px;">
+                Jika Anda menambah produk di Laragon (localhost), klik tombol <strong>"Sync ke SQLite"</strong> di pojok kanan atas navbar admin ini. File <code>database/database.sqlite</code> akan ter-update otomatis. Lalu cukup lakukan <code>git add . && git commit -m "update produk" && git push</code> agar Vercel ikut ter-update!
+            </p>
+
+            <div style="text-align: right; border-top: 1px solid rgba(200, 149, 108, 0.2); padding-top: 16px;">
+                <button type="button" onclick="closeDbModal()" style="padding: 9px 24px; background: var(--brown-dark); color: white; border: none; border-radius: var(--radius-full); font-weight: 600; cursor: pointer;">
+                    Mengerti, Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openDbModal() {
+            var modal = document.getElementById('dbGuideModal');
+            if (modal) modal.classList.add('active');
+        }
+        function closeDbModal() {
+            var modal = document.getElementById('dbGuideModal');
+            if (modal) modal.classList.remove('active');
+        }
+    </script>
 
     @yield('scripts')
 </body>

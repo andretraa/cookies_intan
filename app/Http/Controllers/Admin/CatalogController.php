@@ -26,7 +26,8 @@ class CatalogController extends Controller
 
         // Search by name
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $likeOp = \Illuminate\Support\Facades\DB::connection()->getDriverName() === 'pgsql' ? 'ilike' : 'like';
+            $query->where('name', $likeOp, '%' . $request->search . '%');
         }
 
         $products = $query->orderBy('sort_order', 'asc')->orderBy('id', 'desc')->get();

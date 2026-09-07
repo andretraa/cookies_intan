@@ -111,4 +111,17 @@ class SettingController extends Controller
         return redirect()->route('admin.settings.index')
             ->with('success', 'Semua teks halaman depan berhasil direset ke pengaturan bawaan!');
     }
+
+    /**
+     * Sinkronisasi data saat ini ke file database/database.sqlite
+     */
+    public function syncSqlite()
+    {
+        try {
+            Artisan::call('db:sync-sqlite');
+            return back()->with('success', 'Database berhasil disinkronkan ke database/database.sqlite! File ini siap di-push ke Git agar Vercel mendapatkan update terbaru.');
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Gagal menyinkronkan database: ' . $e->getMessage());
+        }
+    }
 }

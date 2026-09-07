@@ -44,6 +44,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/', [AdminSettingController::class, 'index'])->name('index');
             Route::post('/', [AdminSettingController::class, 'update'])->name('update');
             Route::post('/reset', [AdminSettingController::class, 'reset'])->name('reset');
+            Route::post('/sync-sqlite', [AdminSettingController::class, 'syncSqlite'])->name('sync.sqlite');
         });
     });
 });

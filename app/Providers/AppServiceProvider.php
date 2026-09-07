@@ -23,6 +23,56 @@ class AppServiceProvider extends ServiceProvider
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
 
+        // Bagikan status database ke seluruh tampilan admin
+        \Illuminate\Support\Facades\View::composer('admin.*', function ($view) {
+            $driver = config('database.default');
+            $host = config("database.connections.{$driver}.host", '');
+            $database = config("database.connections.{$driver}.database", '');
+
+            $isCloud = false;
+            $type = 'warning';
+            $badge = 'Mode Serverless Sementara';
+            $detail = 'Data yang Anda tambah/edit di Vercel saat ini disimpan sementara dan akan reset jika server tidur. Sambungkan Cloud Database gratis agar tersimpan permanen!';
+
+            if ($driver === 'pgsql') {
+                $isCloud = true;
+                $type = 'success';
+                $badge = 'Cloud Database (PostgreSQL)';
+                $detail = 'Tersimpan permanen di cloud (' . $host . '). Data aman selamanya!';
+            } elseif ($driver === 'mysql') {
+                if (!empty($host) && $host !== '127.0.0.1' && $host !== 'localhost') {
+                    $isCloud = true;
+                    $type = 'success';
+                    $badge = 'Cloud Database (MySQL)';
+                    $detail = 'Tersimpan permanen di cloud (' . $host . '). Data aman selamanya!';
+                } else {
+                    $type = 'local';
+                    $badge = 'MySQL Lokal (Laragon)';
+                    $detail = 'Berjalan di komputer lokal (' . $host . '). Gunakan tombol Sinkronisasi SQLite sebelum git push ke Vercel.';
+                }
+            } elseif ($driver === 'sqlite') {
+                if (str_contains((string) $database, '/tmp/')) {
+                    $isCloud = false;
+                    $type = 'warning';
+                    $badge = 'SQLite Sementara (Vercel Serverless)';
+                    $detail = 'Perhatian: Vercel Serverless mereset database /tmp saat idle. Tambahkan Cloud Database di Vercel agar perubahan produk & teks tersimpan permanen.';
+                } else {
+                    $type = 'local';
+                    $badge = 'SQLite File (' . basename((string) $database) . ')';
+                    $detail = 'File database SQLite lokal. Perubahan akan langsung tersimpan di file database.';
+                }
+            }
+
+            $view->with('dbStatus', [
+                'isCloud' => $isCloud,
+                'type'    => $type,
+                'badge'   => $badge,
+                'detail'  => $detail,
+                'driver'  => $driver,
+                'host'    => $host,
+            ]);
+        });
+
         \Illuminate\Support\Facades\Hash::extend('safe_bcrypt', function ($app) {
             return new class extends \Illuminate\Hashing\AbstractHasher implements \Illuminate\Contracts\Hashing\Hasher {
                 public function make(#[\SensitiveParameter] $value, array $options = [])
