@@ -20,11 +20,17 @@ class SiteSettingSeeder extends Seeder
             ['key' => 'hero_subtitle', 'value' => 'Dessert homemade yang dibuat fresh dan sepenuh hati — dari bahan pilihan, hadir di setiap kesempatan spesialmu dengan rasa yang tak terlupakan.', 'group' => 'hero'],
             ['key' => 'hero_btn_catalog', 'value' => 'Lihat Katalog', 'group' => 'hero'],
             ['key' => 'hero_btn_order', 'value' => 'Pesan Sekarang', 'group' => 'hero'],
+
+            // Hero Image
+            ['key' => 'hero_image', 'value' => 'images/cookies.jpg', 'group' => 'hero'],
+
+            // Logo
+            ['key' => 'logo_image', 'value' => 'images/logo.png', 'group' => 'general'],
             
             // Hero Badges
-            ['key' => 'hero_badge_left_icon', 'value' => '🍫', 'group' => 'hero'],
+            ['key' => 'hero_badge_left_icon', 'value' => '🎂', 'group' => 'hero'],
             ['key' => 'hero_badge_left_title', 'value' => 'Best Seller', 'group' => 'hero'],
-            ['key' => 'hero_badge_left_sub', 'value' => 'Fudgy Brownies', 'group' => 'hero'],
+            ['key' => 'hero_badge_left_sub', 'value' => 'Puding & Cake Spesial', 'group' => 'hero'],
             
             ['key' => 'hero_badge_right_icon', 'value' => '⭐', 'group' => 'hero'],
             ['key' => 'hero_badge_right_title', 'value' => '4.9 / 5.0', 'group' => 'hero'],
@@ -69,6 +75,10 @@ class SiteSettingSeeder extends Seeder
             ['key' => 'about_desc_1', 'value' => 'Setiap cookies kami dibuat fresh dengan bahan-bahan berkualitas pilihan, hadir di setiap momen spesial — dari ulang tahun, hadiah, hingga camilan sehari-hari yang memanjakan. Semua sweet things made inside and made with love.', 'group' => 'about'],
             ['key' => 'about_desc_2', 'value' => 'Kami percaya bahwa makanan yang dibuat dengan hati akan selalu terasa berbeda. Setiap gigitan adalah bukti cinta kami kepada pelanggan setia Cookies Intan.', 'group' => 'about'],
             ['key' => 'about_tagline', 'value' => 'Small treats. Big feelings. ✨', 'group' => 'about'],
+
+            // About Images
+            ['key' => 'about_image_main',      'value' => 'images/cookies.jpg', 'group' => 'about'],
+            ['key' => 'about_image_secondary', 'value' => 'images/cookies.jpg', 'group' => 'about'],
 
             // === CARA PESAN SECTION ===
             ['key' => 'order_section_badge', 'value' => '✨ Simple & Easy ✨', 'group' => 'order'],

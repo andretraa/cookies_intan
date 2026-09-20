@@ -63,7 +63,7 @@
         <!-- Image -->
         <div class="hero-image">
             <div class="hero-image-main">
-                <img src="{{ \App\Models\SiteSetting::getImageUrl('hero_image', 'images/hero_cookies.jpg') }}" alt="Cookies dan Brownies Homemade Cookies Intan" loading="eager">
+                <img src="{{ \App\Models\SiteSetting::getImageUrl('hero_image', 'images/cookies.jpg') }}" alt="Cookies dan Brownies Homemade Cookies Intan" loading="eager">
             </div>
 
             <!-- Floating badges -->
@@ -128,11 +128,27 @@
         <!-- Category Tabs -->
         <div class="category-tabs reveal">
             <button class="tab-btn active" data-filter="all" id="tab-all">Semua</button>
-            <button class="tab-btn" data-filter="brownies" id="tab-brownies">Brownies</button>
-            <button class="tab-btn" data-filter="cookies" id="tab-cookies">Cookies</button>
-            <button class="tab-btn" data-filter="hampers" id="tab-hampers">Hampers</button>
-            <button class="tab-btn" data-filter="cake" id="tab-cake">Birthday Cake</button>
-            <button class="tab-btn" data-filter="pudding" id="tab-pudding">Pudding</button>
+            @php
+                $availableCategories = $products->pluck('category')->unique()->values();
+                $categoryMap = [
+                    'cake'     => 'Birthday Cake',
+                    'pudding'  => 'Pudding',
+                    'brownies' => 'Brownies',
+                    'cookies'  => 'Cookies',
+                    'hampers'  => 'Hampers',
+                    'lainnya'  => 'Lainnya',
+                ];
+            @endphp
+            @foreach($categoryMap as $catKey => $catLabel)
+                @if($availableCategories->contains($catKey))
+                    <button class="tab-btn" data-filter="{{ $catKey }}" id="tab-{{ $catKey }}">{{ $catLabel }}</button>
+                @endif
+            @endforeach
+            @foreach($availableCategories as $catKey)
+                @if(!array_key_exists($catKey, $categoryMap))
+                    <button class="tab-btn" data-filter="{{ $catKey }}" id="tab-{{ $catKey }}">{{ ucfirst($catKey) }}</button>
+                @endif
+            @endforeach
         </div>
 
         <!-- Products Grid -->
@@ -165,7 +181,7 @@
     <div class="about-inner">
         <!-- Images -->
         <div class="about-images reveal-left">
-            <img class="about-img-main" src="{{ \App\Models\SiteSetting::getImageUrl('about_image_main', 'images/hero_cookies.jpg') }}" alt="Tentang Cookies Intan" loading="lazy">
+            <img class="about-img-main" src="{{ \App\Models\SiteSetting::getImageUrl('about_image_main', 'images/cookies.jpg') }}" alt="Tentang Cookies Intan" loading="lazy">
             <img class="about-img-secondary" src="{{ \App\Models\SiteSetting::getImageUrl('about_image_secondary', 'images/cookies.jpg') }}" alt="Proses pembuatan cookies" loading="lazy">
             <div class="about-heart">❤️</div>
         </div>
